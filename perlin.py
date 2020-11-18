@@ -48,9 +48,9 @@ class PerlinNoiseFactory(object):
 
         self.dimension = dimension
         self.octaves = octaves
-        #print(tile)
+        # print(tile)
         self.tile = tile + (0,) * dimension
-        #print(self.tile)
+        # print(self.tile)
         self.unbias = unbias
 
         # For n dimensions, the range of Perlin noise is ±sqrt(n)/2; multiply
