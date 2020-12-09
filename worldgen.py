@@ -23,7 +23,7 @@ class world:  # создавае-мый из main.py класс мира, сод
             self.space_range, self.space_range, self.frame_range))  # объект трехмерного шума перлина
         print('DEBUG : Perlin noise has been generated.')
         t2 = time.time() - t1
-        print('DEBUG : Perlin noise has been generated for %d seconds.)' % (t2))
+        print(f'DEBUG : Perlin noise has been generated for {t2} seconds.)')
 
         self.map_tiles = []  # карта
 
@@ -33,7 +33,7 @@ class world:  # создавае-мый из main.py класс мира, сод
         self.save_path = '/map/%dkm_world_tile%d_%s.png' % (self.frames, self.space_range, self.seed)
         self.img.save(os.getcwd().replace('\\', '/') + self.save_path)
         timestamp = time.ctime(time.time())
-        self.log.write("World generation start has been done at: %s" % (timestamp) + '\n')
+        self.log.write(f"World generation start has been done at: %{timestamp}\n")
         self.log.close()
         return None
 
@@ -48,8 +48,8 @@ class world:  # создавае-мый из main.py класс мира, сод
         max_heigh = heigh[len(heigh) - 1]
         print('Min heigh is', min_heigh)
         print('Max heigh is', max_heigh)
-        self.log.write("World max heigh point: %d" % (min_heigh) + '\n')
-        self.log.write("World min heigh point: %d" % (max_heigh) + '\n')
+        self.log.write(f"World max heigh point: {max_heigh}\n")
+        self.log.write(f"World min heigh point: {max_heigh}\n")
         amount = 0
         for x in range(len(heigh)):
             amount = amount + heigh[x]
@@ -61,7 +61,7 @@ class world:  # создавае-мый из main.py класс мира, сод
 
         print(amount)
         print(average)
-        self.log.write("World average heigh point: %d" % (average) + '\n')
+        self.log.write(f"World average heigh point: {average}\n")
 
         return None
 
@@ -135,13 +135,13 @@ class Map:
 
     def __getitem__(self, tup):
         y, x, z = tup
-        if (self.y_size > y and y >= 0) and (self.x_size > x and x >= 0):
+        if (self.y_size > y >= 0) and (self.x_size > x >= 0):
             return self._map[y][x][z]
         raise Exception("Out of bounds")
 
     def __setitem__(self, tup, value):
         y, x, z = tup
-        if (self.y_size > y and y >= 0) and (self.x_size > x and x >= 0):
+        if (self.y_size > y >= 0) and (self.x_size > x >= 0):
             self._map[y][x][z] = value
             return
         raise Exception("Out of bounds")  # карта, хранящая x,y,z координаты и привязанный объект (region)
