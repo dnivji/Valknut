@@ -1,6 +1,7 @@
 from perlin import PerlinNoiseFactory  # загрузка генератора шума Перлина.
 import PIL.Image
 import time
+import os
 
 
 class world:  # создавае-мый из main.py класс мира, содержащий в себе все сведения об объекте игрового мира
@@ -29,8 +30,8 @@ class world:  # создавае-мый из main.py класс мира, сод
         self.img = self.draw_image()
         self.log = open('log.txt', 'a')
         # heights_analysis(self.map_tiles)
-        self.save_path = 'map/%dkm_world_tile%d_%s.png' % (self.frames, self.space_range, self.seed)
-        self.img.save(self.save_path)
+        self.save_path = '/map/%dkm_world_tile%d_%s.png' % (self.frames, self.space_range, self.seed)
+        self.img.save(os.getcwd().replace('\\', '/') + self.save_path)
         timestamp = time.ctime(time.time())
         self.log.write("World generation start has been done at: %s" % (timestamp) + '\n')
         self.log.close()
@@ -63,6 +64,30 @@ class world:  # создавае-мый из main.py класс мира, сод
         self.log.write("World average heigh point: %d" % (average) + '\n')
 
         return None
+
+    def draw_image(self):
+        for t in range(1):
+            t1 = time.time()
+            print('DEBUG : Start drawing image.')
+            img = PIL.Image.new('RGB', (self.size, self.size))
+            for x in range(self.size):
+                for y in range(self.size):
+                    n = self.pnf(x / self.res, y / self.res, t / self.frameres)
+                    z = (int((n + 1) / 2 * 255 + 0.5))  # получение высоты тайла
+                    if z < 90:  # 95 уровень воды
+                        img.putpixel((x, y), (0, 0, z))
+                    elif z > 150:  # уровень гор
+                        if z > 165:
+                            cliff = z - 30
+                            img.putpixel((x, y), (cliff, cliff, cliff))
+                        else:
+                            img.putpixel((x, y), (z, z, z))
+                    else:
+                        img.putpixel((x, y), (0, z, 0))
+
+        t2 = time.time() - t1
+        print('DEBUG : Image has been drawed for %d seconds.)' % (t2))
+        return img
 
 
 class Region(world):
@@ -120,27 +145,3 @@ class Map:
             self._map[y][x][z] = value
             return
         raise Exception("Out of bounds")  # карта, хранящая x,y,z координаты и привязанный объект (region)
-
-    def draw_image(self):
-        for t in range(1):
-            t1 = time.time()
-            print('DEBUG : Start drawing image.')
-            img = PIL.Image.new('RGB', (self.size, self.size))
-            for x in range(self.size):
-                for y in range(self.size):
-                    n = self.pnf(x / self.res, y / self.res, t / self.frameres)
-                    z = (int((n + 1) / 2 * 255 + 0.5))  # получение высоты тайла
-                    if z < 90:  # 95 уровень воды
-                        img.putpixel((x, y), (0, 0, z))
-                    elif z > 150:  # уровень гор
-                        if z > 165:
-                            cliff = z - 30
-                            img.putpixel((x, y), (cliff, cliff, cliff))
-                        else:
-                            img.putpixel((x, y), (z, z, z))
-                    else:
-                        img.putpixel((x, y), (0, z, 0))
-
-        t2 = time.time() - t1
-        print('DEBUG : Image has been drawed for %d seconds.)' % (t2))
-        return img

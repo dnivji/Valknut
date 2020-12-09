@@ -24,12 +24,12 @@ class discord_bot():  # объект, отвечающий за взаимоде
                 await ctx.send('Sorry, cruel tyranny limits the size of the world for you.')
             else:
                 await ctx.send('Generating of world has been started')
-                name = world_generator(size, tile, octaves, seed)
+                name = world(size, tile, octaves, seed)
                 await ctx.send('Generating of world has been done succefull.')
                 print(name.save_path)
                 await ctx.send(
                     'World has been generated with size = %d, tile size = %d, with %d octaves and "%s" seed.' % (
-                    size, tile, octaves, seed))
+                        size, tile, octaves, seed))
                 await ctx.send('This is your map.', file=discord.File(name.save_path))
                 await ctx.send(file=discord.File('log.txt'))
 
